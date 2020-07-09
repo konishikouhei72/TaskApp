@@ -97,25 +97,41 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
 
     var n: String = ""
     override fun onClick(v: View) {
-        n = search_edit_text.text.toString()
         reloadListView()
     }
 
 
     private fun reloadListView() {
+
         n = search_edit_text.text.toString()
 
-        // Realmデータベースから、「全てのデータを取得して新しい日時順に並べた結果」を取得
-        var taskRealmResults = mRealm.where(Task::class.java).equalTo("category",n).findAll().sort("date", Sort.DESCENDING)
+        if (n == ""){
+            // Realmデータベースから、「全てのデータを取得して新しい日時順に並べた結果」を取得
+            var taskRealmResults = mRealm.where(Task::class.java).findAll().sort("date", Sort.DESCENDING)
 
-        // 上記の結果を、TaskList としてセットする
-        mTaskAdapter.taskList = mRealm.copyFromRealm(taskRealmResults)
+            // 上記の結果を、TaskList としてセットする
+            mTaskAdapter.taskList = mRealm.copyFromRealm(taskRealmResults)
 
-        // TaskのListView用のアダプタに渡す
-        listView1.adapter = mTaskAdapter
+            // TaskのListView用のアダプタに渡す
+            listView1.adapter = mTaskAdapter
 
-        // 表示を更新するために、アダプターにデータが変更されたことを知らせる
-        mTaskAdapter.notifyDataSetChanged()
+            // 表示を更新するために、アダプターにデータが変更されたことを知らせる
+            mTaskAdapter.notifyDataSetChanged()
+        }else {
+            // Realmデータベースから、「全てのデータを取得して新しい日時順に並べた結果」を取得
+            var taskRealmResults = mRealm.where(Task::class.java).equalTo("category",n).findAll().sort("date", Sort.DESCENDING)
+
+            // 上記の結果を、TaskList としてセットする
+            mTaskAdapter.taskList = mRealm.copyFromRealm(taskRealmResults)
+
+            // TaskのListView用のアダプタに渡す
+            listView1.adapter = mTaskAdapter
+
+            // 表示を更新するために、アダプターにデータが変更されたことを知らせる
+            mTaskAdapter.notifyDataSetChanged()
+        }
+
+
     }
 
     override fun onDestroy() {
